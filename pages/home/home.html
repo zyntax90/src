@@ -1,0 +1,20 @@
+
+<ion-header>
+  <ion-navbar hideBackButton *navbar>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="no-scroll">
+	<img class="map" src="img/europe.jpg" />
+	<h2 class="map-title">Title</h2>
+</ion-content>
+
+<ion-footer>
+	<ion-segment>
+		<ion-segment-button value="Add" (click)="pushConfig()">Hinzufügen</ion-segment-button>
+		<ion-segment-button value="Play" (click)="pushGame()">Neues Spiel</ion-segment-button>
+	</ion-segment>
+</ion-footer>
