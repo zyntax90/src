@@ -1,0 +1,20 @@
+
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-title>
+      Test title
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-scroll class="map-scroll" (click)="getCoordinate($event)" zooming="true" direction="xy" delegate-handle="zoom-pane" min-zoom="1" scrollbar-x="false" scrollbar-y="false">   
+		<img src="img/europe.jpg" />
+	</ion-scroll>
+</ion-content>
+
+<ion-footer>
+<ion-segment>
+<ion-segment-button value="Back" (click)="pushHome()">Zurück</ion-segment-button>
+</ion-segment>
+</ion-footer>
