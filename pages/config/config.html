@@ -8,10 +8,14 @@
 </ion-header>
 
 <ion-content padding>
-	<div class="yes-scroll" >
-		<img class="img-scroll" src="img/europe.jpg" />	
-	</div>
-	<div id="board"></div>		
+	<!--<div class="yes-scroll" >-->
+	<canvas id="cnvs" (click)="setCoordinate($event)" style="height:100%;width=100%;background-image:url('img/europe.jpg');"></canvas>
+		<!--<img id="pin" src="{{imgPinSource}}" style="visibility: {{isVisible}}" />-->
+    <!--<img id="map" src="{{imgMapSource}}" style="visibility:hidden"/>-->
+
+		
+	<!--</div>-->
+
 </ion-content>
 
 
