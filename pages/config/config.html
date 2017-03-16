@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-	<ion-scroll zooming="true" direction="xy" style="width: 1100px; height: 806px;">
+	<ion-scroll (pinch)="pinchEvent($event)" zooming="true" direction="xy" style="width: 1100px; height: 806px;">
 		<canvas id="cnvs" (click)="setCoordinate(this,$event)" style="height:806px;width:1100px;background-image:url('img/europe.jpg');"></canvas>
 	</ion-scroll>
  </ion-content>

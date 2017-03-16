@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { Common } from '../common';
 import { App } from 'ionic-angular';
+import { Gesture } from 'ionic-angular';
 
 @Component({
   selector: 'page-config',
   templateUrl: 'config.html'
 })
 export class ConfigPage {
+ 
+  @ViewChild('cnvs') element;
+  gesture: Gesture
  
   private xPos : number;
   private yPos : number;
@@ -31,7 +35,23 @@ export class ConfigPage {
    this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
    this.canvas.width = this.canvas.offsetWidth;
    this.canvas.height = this.canvas.offsetHeight;
+   
+   
+     this.gesture = new Gesture(this.element.nativeElement);    
+    
+    //listen for the gesture
+    this.gesture.listen();
+    
+    //turn on listening for pinch or rotate events
+    this.gesture.on('pinch', e => console.log(e));
+    
+    //add event listener
+    this.gesture.on('pinch', () => console.log('pinch end event'));
   }
+  
+  public pinchEvent(e){
+ }
+  
   
  
   public setCoordinate(canvas,event){
