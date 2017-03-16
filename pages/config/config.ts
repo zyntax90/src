@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { Common } from '../common';
@@ -11,6 +11,10 @@ import { Gesture } from 'ionic-angular';
 })
 export class ConfigPage {
  
+  @ViewChild('canvasmap') element;
+  private gesture: Gesture;
+ 
+	
   private xPos : number;
   private yPos : number;
   
@@ -29,18 +33,24 @@ export class ConfigPage {
   }
   
   ionViewDidLoad() {
-   this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
-   this.canvas.width = this.canvas.offsetWidth;
-   this.canvas.height = this.canvas.offsetHeight;
+	this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+	this.canvas.width = this.canvas.offsetWidth;
+	this.canvas.height = this.canvas.offsetHeight;
+   
+	/*this.gesture = new Gesture(this.element.nativeElement);
+	this.gesture.listen();
+	this.gesture.on('pinch', e => this.pinchEvent(e));*/
   }
   
-  public pinchEvent(e){
-  alert("pinched");
- }
+  
+  private pinchEvent(event) {
+    console.log(event);
+  }
   
   
  
   public setCoordinate(canvas,event){
+  
     if(this.isVisible == "hidden"){
 		this.isVisible = "visible";
 	}
@@ -49,6 +59,7 @@ export class ConfigPage {
 	this.yPos = event.clientY - rect.top;
 	
 	var context = this.canvas.getContext("2d");
+	context.clearRect(0,0,this.canvas.width,this.canvas.height);
 	this.loadImage(context,this.xPos,this.yPos);
   }
   
