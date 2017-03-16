@@ -29,41 +29,38 @@ export class ConfigPage {
   
   ionViewDidLoad() {
    this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+   this.canvas.width = this.canvas.offsetWidth;
+   this.canvas.height = this.canvas.offsetHeight;
   }
   
  
-  public setCoordinate(event){
+  public setCoordinate(canvas,event){
     if(this.isVisible == "hidden"){
 		this.isVisible = "visible";
 	}
-	
-	this.xPos = event.x;
-	this.yPos = event.y;
+	var rect = this.canvas.getBoundingClientRect();
+	this.xPos = event.clientX - rect.left;
+	this.yPos = event.clientY - rect.top;
 	
 	var context = this.canvas.getContext("2d");
-	this.loadImage(context,Common.pinUrl,this.xPos,this.yPos);
-	/*var pinImg = new Image();
-	pinImg.coords={this.xPos,this.xPos,this.yPos,this.yPos}
-	pinImg.onload = function() {
-		context.drawImage(pinImg, pinImg.coords.x, pinImg.coords.y);
-	};
-	
-	pinImg.src = Common.pinUrl;	*/
+	this.loadImage(context,this.xPos,this.yPos);
   }
   
-  private loadImage(context,src,x,y){
+  private loadImage(context,x,y){
 	var imageObj = new Image();
     imageObj.src = Common.pinUrl;
     imageObj.onload = function() {
-		alert("drawing");
-        context.drawImage(imageObj, 100, 100,10,10);
+		context.drawImage(imageObj, x, y, 20, 20);
     };
   }
   
   public pushHome(){
 	this.navCtrl.push(HomePage);
   }
-
+ 
 }
+
+
+
 
 
