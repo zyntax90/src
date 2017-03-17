@@ -4,9 +4,8 @@ import { NavController } from 'ionic-angular';
 
 @Component({
   selector: 'page-common',
-  templateUrl: 'common.html'
 })
-export class Common {
+export class TextResource {
  
   public static pinUrl : string = "img/pin.ico";
   public static mapUrl : string = "img/europe.jpg";
