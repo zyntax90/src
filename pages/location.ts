@@ -24,9 +24,5 @@ export class Location {
 	}
   }
 
-  public setPoint(xPos,yPos): void {
-      this.xPosition = xPos;
-      this.yPosition = yPos;
-      this.index = xPos + yPos;
-  }
+  
 }

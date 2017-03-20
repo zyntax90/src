@@ -14,4 +14,6 @@ export class Npc {
   public setLocation(location): void {
       this.location = location;
   }
+
+ 
 }

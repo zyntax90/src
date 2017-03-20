@@ -28,7 +28,6 @@ export class GamePage {
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
       //Test
-      this.npc = new Npc();
       this.player = new Player();
       this.loadNextLocation();
   }
@@ -54,10 +53,16 @@ export class GamePage {
       var context = this.canvas.getContext("2d");
       var x = event.clientX - rect.left;
       var y = event.clientY - rect.top;
-      this.player.location.setPoint(x,y);
 
-      this.clearCanvas(context,isPlayer);
-      this.loadImage(context, this.player.location.xPosition, this.player.location.yPosition,isPlayer);
+      this.clearCanvas(context, isPlayer);
+
+      if (isPlayer) {   
+          this.locationManager.setPoint(this.player.location,x, y);
+          this.loadImage(context, this.player.location.xPosition, this.player.location.yPosition, isPlayer);
+      } else {
+          this.locationManager.setPoint(this.npc.location, x, y);
+          this.loadImage(context, this.npc.location.xPosition, this.npc.location.yPosition, isPlayer);
+      }
   }
 
   public confirmLocation(){
@@ -66,14 +71,11 @@ export class GamePage {
       var event = { clientX: this.npc.location.xPosition, clientY:  this.npc.location.yPosition};
       this.setCoordinate(this.canvas, event, false);
 
-      var result= this.getDifferenceValue();
-          let alert = this.alertCtrl.create({
-              title: 'Ergebnis',
-              subTitle: 'Differenz beträgt: ' + result,
-              buttons: ['OK']
-          });
-          alert.present();
-     
+      var result = this.getDifferenceValue();
+      var textResult = <HTMLParagraphElement>document.getElementById('result');
+      textResult.style.visibility = "visible";
+      textResult.innerHTML = result + " Km";
+
   }
 
   public presentCancelPrompt() {
@@ -112,6 +114,8 @@ export class GamePage {
   }
 
   private loadNextLocation() {
+      //this.npc = new Npc(this.locationManager.getRandomLocation());
+      this.npc = new Npc();
       this.npc.setLocation(this.locationManager.getRandomLocation());
       this.question = "Wo ist " + this.npc.location.name + "?";
   }
@@ -130,7 +134,7 @@ export class GamePage {
   }
   
   private pushHome() {
-      FileService.saveLocations(this.locationManager.getLocations());
+      //FileService.saveLocations(this.locationManager.getLocations());
       this.navCtrl.push(HomePage);
   }
 

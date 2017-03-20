@@ -11,5 +11,7 @@ export class Player {
   constructor() {
       this.location = new Location();
       this.isConfirmed = false;
-  }
+    }
+
+ 
 }

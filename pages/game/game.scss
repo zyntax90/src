@@ -27,6 +27,14 @@ page-home {
 	overflow-x:scroll;
 }
 
+.result{
+    position:fixed;
+	bottom:70px;
+	left:60px;
+	font-size:14px;
+    visibility:hidden;
+}
+
 #board{
 	height:100px;
 }

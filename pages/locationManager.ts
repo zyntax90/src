@@ -7,12 +7,17 @@ export class LocationManager {
  
     private static instance: LocationManager = new LocationManager();
     private locations: Array<Location> = FileService.loadLocations();
-        
+
+    private xOfOneKm = 19.84;
+    private yOfOneKm = 19.40;
+
     constructor() {
         if (LocationManager.instance) {
             throw new Error("Singeleton Exception");
         }
-        
+
+        if (this.locations == null)
+            this.locations = new Array<Location>();
         LocationManager.instance = this;
     }
 
@@ -36,9 +41,15 @@ export class LocationManager {
     public getPointsApart(locationFrom, locationGoal): number {
         var xDiff = Math.abs(locationGoal.xPosition - locationFrom.xPosition);
         var yDiff = Math.abs(locationGoal.yPosition - locationFrom.yPosition);
-        var result = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2)); 
-        
-        return result;
+        var xKm = xDiff / this.xOfOneKm;
+        var yKm = yDiff / this.yOfOneKm;
+
+        return Math.sqrt(Math.pow(xKm, 2) + Math.pow(yKm, 2)); 
     }
 
+    public setPoint(location,newX,newY): void {
+        location.xPosition = newX;
+        location.yPosition = newY;
+        location.index = newX + newY;
+    }
 }

@@ -10,8 +10,8 @@ export class FileService {
     }
 
     public static loadLocations(): Array<Location> {
-        var locations = JSON.parse(window.localStorage.getItem('Locations'));
-        return locations
+        //window.localStorage.removeItem('Locations');
+        return JSON.parse(window.localStorage.getItem('Locations'));
     }
     
    

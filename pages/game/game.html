@@ -10,7 +10,8 @@
 <ion-content>
 	<ion-scroll  zooming="true" direction="xy" style="width: 1100px; height: 806px;">
 		<canvas id="cnvs" (pinch)="pinchEvent($event)" (click)="setCoordinate(this,$event,true)" style="height:806px;width:1100px;background-image:url('img/europe.jpg');"></canvas>
-	<ion-icon ios="ios-thumbs-up" md="md-thumbs-up" class="confirm-button" (click)="confirmLocation()"></ion-icon>
+	    <ion-icon ios="ios-thumbs-up" md="md-thumbs-up" class="confirm-button" (click)="confirmLocation()"></ion-icon>
+	    <p id="result" class="result"></p>
 	</ion-scroll>
 	
 </ion-content>
