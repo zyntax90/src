@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FileService } from '../pages/services';
+import { FileService } from '../pages/common/services';
 @Component({
   selector: 'page-location'
 })
@@ -28,7 +28,17 @@ export class LocationManager {
         return this.locations;
     }
 
-    /*public getLocation(index): Location {
-        return this.locations.filter(location => location.index === index)[0];
-    }*/
+    public getRandomLocation(): Location {
+        var arrayIndex = Math.floor(Math.random() * this.locations.length);
+        return this.locations[arrayIndex];
+    }
+
+    public getPointsApart(locationFrom, locationGoal): number {
+        var xDiff = Math.abs(locationGoal.xPosition - locationFrom.xPosition);
+        var yDiff = Math.abs(locationGoal.yPosition - locationFrom.yPosition);
+        var result = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2)); 
+        
+        return result;
+    }
+
 }

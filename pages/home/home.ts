@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ConfigPage } from '../config/config';
+import { GamePage } from '../game/game';
+
 
 @Component({
   selector: 'page-home',
@@ -18,8 +20,10 @@ export class HomePage {
 	});
   }
   
-  public pushGame(){
-  
+  public pushGame(event, item){
+      this.navCtrl.push(GamePage, {
+          item: item
+      });
   }
 
 }

@@ -2,15 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { Gesture, AlertController } from 'ionic-angular';
-import { TextResource } from '../resources';
-import { FileService } from '../services';
+import { TextResource } from '../common/resources';
+import { FileService } from '../common/services';
 import { Location } from '../location';
 import { LocationManager } from '../locationManager';
 
-
 @Component({
   selector: 'page-config',
-  templateUrl: 'config.html',
+  templateUrl: 'config.html'
 })
 export class ConfigPage {
  
@@ -19,6 +18,7 @@ export class ConfigPage {
  
   private location: Location;
   private locationManager : LocationManager;
+  private isCancelled : boolean;
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   
@@ -37,11 +37,10 @@ export class ConfigPage {
 	this.gesture.on('pinch', e => this.pinchEvent(e));*/
   }
   
-  
-  private pinchEvent(event) {
-    console.log(event);
-  }
-  
+  /**
+   * Public Methods
+   */
+ 
   public setCoordinate(canvas,event){
   
     var rect = this.canvas.getBoundingClientRect();
@@ -58,42 +57,32 @@ export class ConfigPage {
   public addLocation(){
 	this.presentAddLocationTextPrompt();
   }
-  
-  private presentAddLocationTextPrompt() {
-  let alert = this.alertCtrl.create({
-    title: 'Ortsbezeichnung',
-    inputs: [
-      {
-        name: 'locationName',
-        placeholder: 'Ortsname'
-      }
-    ],
+
+   public presentCancelPrompt() {
+    let alert = this.alertCtrl.create({
+    title: 'Abbruch',
+    message: 'Wollen Sie die Bearbeitung abbrechen?',
     buttons: [
       {
-        text: 'Abbrechen',
+        text: 'Ja',
         role: 'cancel',
-        handler: data => {
-          console.log('Ortsangabe abgebrochen');
-        }
+        handler: () => {
+			this.pushHome();
+		}
       },
       {
-        text: 'Hinzufügen',
-        handler: data => {
-            this.location.name = data.locationName;
-            if (this.location.isValid()) {
-                //var instance = LocationManager.getInstace();
-                this.locationManager.addLocation(this.location);
-                //FileService.saveLocation(this.location);
-		  } else {
-            // invalid location
-            return false;
-          }
+        text: 'Nein',
+        handler: () => {
         }
       }
     ]
   });
   alert.present();
   }
+
+    /**
+     * Private Methods
+     */
   
   private loadImage(context,x,y){
 	var imageObj = new Image();
@@ -101,11 +90,51 @@ export class ConfigPage {
     imageObj.onload = function() {
 		context.drawImage(imageObj, x, y, 20, 20);
     };
+   }
+
+  private presentAddLocationTextPrompt() {
+      let alert = this.alertCtrl.create({
+          title: 'Ortsbezeichnung',
+          inputs: [
+              {
+                  name: 'locationName',
+                  placeholder: 'Ortsname'
+              }
+          ],
+          buttons: [
+              {
+                  text: 'Abbrechen',
+                  role: 'cancel',
+                  handler: data => {
+                      console.log('Ortsangabe abgebrochen');
+                  }
+              },
+              {
+                  text: 'Hinzufügen',
+                  handler: data => {
+                      this.location.name = data.locationName;
+                      if (this.location.isValid()) {
+                          //var instance = LocationManager.getInstace();
+                          this.locationManager.addLocation(this.location);
+                          //FileService.saveLocation(this.location);
+                      } else {
+                          // invalid location
+                          return false;
+                      }
+                  }
+              }
+          ]
+      });
+      alert.present();
   }
   
-  public pushHome() {
-      FileService.saveLocations(this.locationManager.getLocations());
-      this.navCtrl.push(HomePage);
+  private pushHome() {
+	FileService.saveLocations(this.locationManager.getLocations());
+    this.navCtrl.push(HomePage);
+  }
+
+  private pinchEvent(event) {
+      console.log(event);
   }
  
 }
