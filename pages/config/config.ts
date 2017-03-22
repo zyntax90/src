@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { Gesture, AlertController } from 'ionic-angular';
+import { Platform, Gesture, AlertController, ModalController } from 'ionic-angular';
 import { TextResource } from '../common/resources';
 import { FileService } from '../common/services';
 import { Location } from '../location';
@@ -20,10 +20,11 @@ export class ConfigPage {
   private location: Location;
   private locationManager : LocationManager;
   private isCancelled: boolean;
+  private modal: any;
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public platform: Platform, private modalCtrl: ModalController, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
       this.location = new Location();
   }
@@ -41,7 +42,8 @@ export class ConfigPage {
   /**
    * Public Methods
    */
- 
+
+
   public setCoordinate(canvas,event){
   
     var rect = this.canvas.getBoundingClientRect();
@@ -136,6 +138,23 @@ export class ConfigPage {
 
   private pinchEvent(event) {
       console.log(event);
+  }
+
+
+    /**
+    *Special
+    */
+  backButtonAction() {
+      /* checks if modal is open */
+      if (this.modal && this.modal.index === 0) {
+          /* closes modal */
+          console.log("here");
+          //this.pushHome();
+      } else {
+          /* exits the app, since this is the main/first tab */
+          this.platform.exitApp();
+          // this.navCtrl.setRoot(AnotherPage);  <-- if you wanted to go to another page
+      }
   }
  
 }

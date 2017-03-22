@@ -25,7 +25,8 @@ export class GamePage {
   private locationManager : LocationManager;
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
-  public question : string;
+  public question: string;
+  public resultDiff : string;
   
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
@@ -35,8 +36,7 @@ export class GamePage {
   }
   
   ionViewDidLoad() {
-      this.canvas = this.myCanvas.nativeElement;
-	//this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+    this.canvas = this.myCanvas.nativeElement;
 	this.canvas.width = this.canvas.offsetWidth;
 	this.canvas.height = this.canvas.offsetHeight;
    
@@ -63,7 +63,7 @@ export class GamePage {
           this.locationManager.setPoint(this.player.location,x, y);
           this.loadImage(context, this.player.location.xPosition, this.player.location.yPosition, isPlayer);
       } else {
-          this.locationManager.setPoint(this.npc.location, x, y);
+         // this.locationManager.setPoint(this.npc.location, x, y);
           this.loadImage(context, this.npc.location.xPosition, this.npc.location.yPosition, isPlayer);
       }
   }
@@ -73,12 +73,12 @@ export class GamePage {
       this.player.isConfirmed = true;
       var event = { clientX: this.npc.location.xPosition, clientY:  this.npc.location.yPosition};
       this.setCoordinate(this.canvas, event, false);
+      //drawLine
 
-      var result = this.getDifferenceValue();
       var textResult = <HTMLParagraphElement>document.getElementById('result');
+      this.resultDiff = this.getDifferenceValue() + " Km";
       textResult.style.visibility = "visible";
-      textResult.innerHTML = result + " Km";
-
+      
   }
 
   public presentCancelPrompt() {
@@ -117,7 +117,6 @@ export class GamePage {
   }
 
   private loadNextLocation() {
-      //this.npc = new Npc(this.locationManager.getRandomLocation());
       this.npc = new Npc();
       this.npc.setLocation(this.locationManager.getRandomLocation());
       this.question = "Wo ist " + this.npc.location.name + "?";
@@ -137,7 +136,6 @@ export class GamePage {
   }
   
   private pushHome() {
-      //FileService.saveLocations(this.locationManager.getLocations());
       this.navCtrl.push(HomePage);
   }
 

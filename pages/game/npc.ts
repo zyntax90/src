@@ -12,7 +12,7 @@ export class Npc {
   }
   
   public setLocation(location): void {
-      this.location = location;
+      this.location = location == null ? new Location() : location;
   }
 
  

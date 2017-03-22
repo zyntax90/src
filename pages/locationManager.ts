@@ -41,8 +41,8 @@ export class LocationManager {
     public getPointsApart(locationFrom, locationGoal): number {
         var xDiff = Math.abs(locationGoal.xPosition - locationFrom.xPosition);
         var yDiff = Math.abs(locationGoal.yPosition - locationFrom.yPosition);
-        var xKm = xDiff / this.xOfOneKm;
-        var yKm = yDiff / this.yOfOneKm;
+        var xKm = xDiff * this.xOfOneKm;
+        var yKm = yDiff * this.yOfOneKm;
 
         return Math.sqrt(Math.pow(xKm, 2) + Math.pow(yKm, 2)); 
     }
