@@ -8,6 +8,8 @@ import { NavController } from 'ionic-angular';
 export class TextResource {
  
   public static pinUrl: string = "img/pin.ico";
+  public static pinWidth: number = 20;
+  public static pinHeight: number = 20;
   public static pin2Url: string = "img/pin2.ico";
   public static mapUrl : string = "img/europe.jpg";
 	

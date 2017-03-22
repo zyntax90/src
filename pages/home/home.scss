@@ -16,7 +16,8 @@ page-home {
 }
 
 .no-scroll .scroll-content{
-     overflow: hidden;
+     overflow-x: hidden !important;
+overflow-y: hidden !important;
 }
 
 

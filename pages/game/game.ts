@@ -15,6 +15,8 @@ import { Player } from '../game/player';
 export class GamePage {
  
   @ViewChild('canvasmap') element;
+  @ViewChild('cnvs') myCanvas;
+
   private gesture: Gesture;
 
   private npc: Npc;
@@ -33,7 +35,8 @@ export class GamePage {
   }
   
   ionViewDidLoad() {
-	this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+      this.canvas = this.myCanvas.nativeElement;
+	//this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
 	this.canvas.width = this.canvas.offsetWidth;
 	this.canvas.height = this.canvas.offsetHeight;
    

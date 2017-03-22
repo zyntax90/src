@@ -22,9 +22,8 @@ page-home {
 	cursor: pointer;
 }
 
-//To be removed for pinch
 .scroll-content{
-	overflow-x:scroll;
+	overflow-x:scroll !important;
 }
 
 .result{

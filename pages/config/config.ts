@@ -13,12 +13,13 @@ import { LocationManager } from '../locationManager';
 })
 export class ConfigPage {
  
-  @ViewChild('canvasmap') element;
+    @ViewChild('canvasmap') element;
+    @ViewChild('cnvs') myCanvas;
   private gesture: Gesture;
  
   private location: Location;
   private locationManager : LocationManager;
-  private isCancelled : boolean;
+  private isCancelled: boolean;
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   
@@ -26,9 +27,9 @@ export class ConfigPage {
       this.locationManager = LocationManager.getInstace();
       this.location = new Location();
   }
-  
+
   ionViewDidLoad() {
-	this.canvas = <HTMLCanvasElement>document.getElementById('cnvs');
+    this.canvas = this.myCanvas.nativeElement;
 	this.canvas.width = this.canvas.offsetWidth;
 	this.canvas.height = this.canvas.offsetHeight;
    
@@ -44,13 +45,13 @@ export class ConfigPage {
   public setCoordinate(canvas,event){
   
     var rect = this.canvas.getBoundingClientRect();
-	var context = this.canvas.getContext("2d");
-	
+    var context = this.canvas.getContext("2d");
+    context.clearRect(this.location.xPosition, this.location.yPosition, TextResource.pinWidth, TextResource.pinHeight);
+
 	var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     this.locationManager.setPoint(this.location,x, y);
 
-	context.clearRect(0,0,this.canvas.width,this.canvas.height);
 	this.loadImage(context,this.location.xPosition,this.location.yPosition);
   }
   
@@ -88,7 +89,7 @@ export class ConfigPage {
 	var imageObj = new Image();
     imageObj.src = TextResource.pinUrl;
     imageObj.onload = function() {
-		context.drawImage(imageObj, x, y, 20, 20);
+        context.drawImage(imageObj, x, y, TextResource.pinWidth, TextResource.pinHeight);
     };
    }
 
@@ -107,7 +108,7 @@ export class ConfigPage {
                   role: 'cancel',
                   handler: data => {
                       console.log('Ortsangabe abgebrochen');
-                  }
+                 }
               },
               {
                   text: 'Hinzufügen',
@@ -129,7 +130,7 @@ export class ConfigPage {
   }
   
   private pushHome() {
-	FileService.saveLocations(this.locationManager.getLocations());
+    FileService.saveLocations(this.locationManager.getLocations());
     this.navCtrl.push(HomePage);
   }
 
