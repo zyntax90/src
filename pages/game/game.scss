@@ -26,7 +26,15 @@ page-home {
 	overflow-x:scroll !important;
 }
 
-.result{
+.result-one{
+    position:fixed;
+	bottom:90px;
+	left:60px;
+	font-size:14px;
+    visibility:hidden;
+}
+
+.result-two{
     position:fixed;
 	bottom:70px;
 	left:60px;

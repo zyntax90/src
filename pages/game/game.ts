@@ -16,33 +16,43 @@ export class GamePage {
  
   @ViewChild('canvasmap') element;
   @ViewChild('cnvs') myCanvas;
+  @ViewChild('resultone') myResultOne;
+  @ViewChild('resulttwo') myResultTwo;
 
   private gesture: Gesture;
 
   private npc: Npc;
-  private player: Player;
+  private playerOne: Player;
+  private playerTwo: Player;
 
   private locationManager : LocationManager;
   public canvas: HTMLCanvasElement;
-  public ctx: CanvasRenderingContext2D;
+  public resultOne: HTMLParagraphElement;
+  public resultTwo: HTMLParagraphElement;
   public question: string;
-  public resultDiff : string;
+  public resultDiffOne: string;
+  public resultDiffTwo: string;
+
   
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
-      //Test
-      this.player = new Player();
+      this.npc = new Npc();
+      this.playerOne = new Player();
+      this.playerTwo = new Player();
       this.loadNextLocation();
   }
   
   ionViewDidLoad() {
     this.canvas = this.myCanvas.nativeElement;
 	this.canvas.width = this.canvas.offsetWidth;
-	this.canvas.height = this.canvas.offsetHeight;
-   
-	/*this.gesture = new Gesture(this.element.nativeElement);
-	this.gesture.listen();
-	this.gesture.on('pinch', e => this.pinchEvent(e));*/
+    this.canvas.height = this.canvas.offsetHeight;
+    this.resultOne = this.myResultOne.nativeElement;
+    this.resultTwo = this.myResultTwo.nativeElement;
+
+
+      /*this.gesture = new Gesture(this.element.nativeElement);
+      this.gesture.listen();
+      this.gesture.on('pinch', e => this.pinchEvent(e));*/
   }
   
 
@@ -60,25 +70,25 @@ export class GamePage {
       this.clearCanvas(context, isPlayer);
 
       if (isPlayer) {   
-          this.locationManager.setPoint(this.player.location,x, y);
-          this.loadImage(context, this.player.location.xPosition, this.player.location.yPosition, isPlayer);
+          if (!this.playerOne.isConfirmed) {
+              this.locationManager.setPoint(this.playerOne.location, x, y);
+              this.loadImage(context, this.playerOne.location.xPosition, this.playerOne.location.yPosition, isPlayer);
+          } else {
+              this.loadImage(context, this.playerOne.location.xPosition, this.playerOne.location.yPosition, isPlayer);
+              this.locationManager.setPoint(this.playerTwo.location, x, y);
+              this.loadImage(context, this.playerTwo.location.xPosition, this.playerTwo.location.yPosition, isPlayer);
+          }
       } else {
-         // this.locationManager.setPoint(this.npc.location, x, y);
           this.loadImage(context, this.npc.location.xPosition, this.npc.location.yPosition, isPlayer);
       }
   }
 
-  public confirmLocation(){
-	if (this.player.isConfirmed) return;
-      this.player.isConfirmed = true;
-      var event = { clientX: this.npc.location.xPosition, clientY:  this.npc.location.yPosition};
-      this.setCoordinate(this.canvas, event, false);
-      //drawLine
-
-      var textResult = <HTMLParagraphElement>document.getElementById('result');
-      this.resultDiff = this.getDifferenceValue() + " Km";
-      textResult.style.visibility = "visible";
-      
+  public confirmLocation() {
+      if (!this.playerOne.isConfirmed)
+          this.playerOne.isConfirmed = true;
+      else
+          this.playerTwo.isConfirmed = true;
+      this.checkWinner();
   }
 
   public presentCancelPrompt() {
@@ -108,8 +118,20 @@ export class GamePage {
    * Private Methods
    */
 
-    private getDifferenceValue():number {
-        return this.locationManager.getPointsApart(this.player.location, this.npc.location);
+    private checkWinner() {
+        if (!this.playerOne.isConfirmed || !this.playerTwo.isConfirmed) return;
+        var event = { clientX: this.npc.location.xPosition, clientY: this.npc.location.yPosition };
+        this.setCoordinate(this.canvas, event, false);
+        this.drawLineDiff(this.playerOne.location);
+        this.drawLineDiff(this.playerTwo.location);
+        this.resultDiffOne = this.getDifferenceValue(this.playerOne.location) + " Km";
+        this.resultOne.style.visibility = "visible";
+        this.resultDiffTwo = this.getDifferenceValue(this.playerTwo.location) + " Km";
+        this.resultTwo.style.visibility = "visible";
+    }
+
+    private getDifferenceValue(fromLocation):number {
+        return this.locationManager.getPointsApart(fromLocation, this.npc.location);
     }
 
   private presentPlayerInputPrompt() {
@@ -117,7 +139,6 @@ export class GamePage {
   }
 
   private loadNextLocation() {
-      this.npc = new Npc();
       this.npc.setLocation(this.locationManager.getRandomLocation());
       this.question = "Wo ist " + this.npc.location.name + "?";
   }
@@ -127,11 +148,20 @@ export class GamePage {
           context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  private drawLineDiff(fromLocation) {
+        var ctx = this.canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.setLineDash([5,15]);
+        ctx.moveTo(fromLocation.xPosition + TextResource.pinWidth, fromLocation.yPosition + TextResource.pinHeight);
+        ctx.lineTo(this.npc.location.xPosition, this.npc.location.yPosition);
+        ctx.stroke();
+   }
+
   private loadImage(context,x,y,isPlayer){
 	var imageObj = new Image();
     imageObj.src = isPlayer ? TextResource.pinUrl : TextResource.pin2Url;
     imageObj.onload = function() {
-		context.drawImage(imageObj, x, y, 20, 20);
+        context.drawImage(imageObj, x, y, TextResource.pinWidth, TextResource.pinHeight);
     };
   }
   
