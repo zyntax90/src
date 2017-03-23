@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { Platform, Gesture, AlertController, ModalController } from 'ionic-angular';
+import { Platform, Gesture, AlertController } from 'ionic-angular';
 import { TextResource } from '../common/resources';
 import { FileService } from '../common/services';
 import { Location } from '../location';
@@ -24,7 +24,7 @@ export class ConfigPage {
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   
-  constructor(public navCtrl: NavController, public platform: Platform, private modalCtrl: ModalController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public platform: Platform, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
       this.location = new Location();
   }

@@ -6,12 +6,14 @@ import { Location } from '../location';
 })
 export class Player {
     public location: Location;
-    public isConfirmed : boolean;
+    public isConfirmed: boolean;
+    public name: string;
 
-  constructor() {
+  constructor(name) {
       this.location = new Location();
       this.isConfirmed = false;
-    }
+      this.name = name;
+  }
 
  
 }

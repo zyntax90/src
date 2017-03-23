@@ -20,25 +20,25 @@ export class GamePage {
   @ViewChild('resulttwo') myResultTwo;
 
   private gesture: Gesture;
-
   private npc: Npc;
   private playerOne: Player;
   private playerTwo: Player;
-
   private locationManager : LocationManager;
+
   public canvas: HTMLCanvasElement;
   public resultOne: HTMLParagraphElement;
   public resultTwo: HTMLParagraphElement;
   public question: string;
   public resultDiffOne: string;
   public resultDiffTwo: string;
+  public progress: string;
 
   
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
       this.locationManager = LocationManager.getInstace();
       this.npc = new Npc();
-      this.playerOne = new Player();
-      this.playerTwo = new Player();
+      this.playerOne = new Player("Spieler 1");
+      this.playerTwo = new Player("Spieler 2");
       this.loadNextLocation();
   }
   
@@ -48,7 +48,7 @@ export class GamePage {
     this.canvas.height = this.canvas.offsetHeight;
     this.resultOne = this.myResultOne.nativeElement;
     this.resultTwo = this.myResultTwo.nativeElement;
-
+    this.progress = this.playerOne.name + " ist an der Reihe";
 
       /*this.gesture = new Gesture(this.element.nativeElement);
       this.gesture.listen();
@@ -84,8 +84,10 @@ export class GamePage {
   }
 
   public confirmLocation() {
-      if (!this.playerOne.isConfirmed)
+      if (!this.playerOne.isConfirmed){
           this.playerOne.isConfirmed = true;
+          this.progress = this.playerTwo.name + " ist an der Reihe";
+      }
       else
           this.playerTwo.isConfirmed = true;
       this.checkWinner();
@@ -128,6 +130,14 @@ export class GamePage {
         this.resultOne.style.visibility = "visible";
         this.resultDiffTwo = this.getDifferenceValue(this.playerTwo.location) + " Km";
         this.resultTwo.style.visibility = "visible";
+
+        if (this.resultDiffOne < this.resultDiffTwo)
+            this.progress = this.playerOne.name + TextResource.literal_hasWon;
+        else if (this.resultDiffOne > this.resultDiffTwo)
+            this.progress = this.playerTwo.name + TextResource.literal_hasWon;
+        else 
+            this.progress = "Unentschieden";
+        
     }
 
     private getDifferenceValue(fromLocation):number {
@@ -152,8 +162,8 @@ export class GamePage {
         var ctx = this.canvas.getContext("2d");
         ctx.beginPath();
         ctx.setLineDash([5,15]);
-        ctx.moveTo(fromLocation.xPosition + TextResource.pinWidth, fromLocation.yPosition + TextResource.pinHeight);
-        ctx.lineTo(this.npc.location.xPosition, this.npc.location.yPosition);
+        ctx.moveTo(fromLocation.xPosition + (TextResource.pinWidth/2), fromLocation.yPosition + TextResource.pinHeight);
+        ctx.lineTo(this.npc.location.xPosition + (TextResource.pinWidth / 2) , this.npc.location.yPosition + TextResource.pinHeight);
         ctx.stroke();
    }
 

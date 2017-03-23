@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform} from 'ionic-angular';
 import { ConfigPage } from '../config/config';
 import { GamePage } from '../game/game';
 
@@ -10,8 +10,8 @@ import { GamePage } from '../game/game';
 })
 export class HomePage {
   
-  
-  constructor(public navCtrl: NavController) {
+    private modal: any;
+    constructor(public navCtrl: NavController, public platform: Platform) {
   }
   
   public pushConfig(event, item){
@@ -24,6 +24,22 @@ export class HomePage {
       this.navCtrl.push(GamePage, {
           item: item
       });
+  }
+
+  /**
+  *Special
+  */
+  backButtonAction() {
+      /* checks if modal is open */
+      if (this.modal && this.modal.index === 0) {
+          /* closes modal */
+          console.log("here");
+          //this.pushHome();
+      } else {
+          /* exits the app, since this is the main/first tab */
+          this.platform.exitApp();
+          // this.navCtrl.setRoot(AnotherPage);  <-- if you wanted to go to another page
+      }
   }
 
 }
